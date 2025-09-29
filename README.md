@@ -1,85 +1,53 @@
-# Assignment: Linear Models, Regularization, and Model Selection on Real Data
+# Proyecto Final – Regresión Lineal y Regularización
 
-**Deadline:** Sunday, October 5th, 2025, 23:59
-
-**Environment:** Python, `numpy`, `pandas`, `matplotlib`, `scikit-learn`.
-
----
-
-## Part A. Linear Regression From Scratch
-
-1. **Dataset**
-   Use the **California Housing dataset** (`from sklearn.datasets import fetch_california_housing`).
-
-   * Create a hold-out test set.
-   * Standardize features to zero mean and unit variance.
-   * Predict the median house value (`MedHouseVal`) from the remaining features using `LinearRegression` from `sklearn.linear_model`.
-
-2. **Closed-form OLS**
-
-   * Derive and implement $\hat\beta = (X^\top X)^{-1}X^\top y$ using only `numpy`.
-   * Report coefficients and intercept.
-   * Plot predicted vs. true median house value on a held-out test set.
-
-3. **Gradient Descent**
-
-   * Implement gradient descent to minimize mean squared error.
-   * Experiment with at least two learning rates; show cost vs. iteration curves.
-   * Compare parameters and test error to the closed-form OLS.
+## Integrantes
+- JOEL MATEO MANRIQUE VELASQUEZ
 
 ---
 
-## Part B. Scikit-learn Linear Models
+## 📌 Diferencias observadas entre OLS, Ridge y Lasso
 
-4. **Baseline**
+### California Housing
+- **OLS (Closed-form)**: Captura la relación lineal base y obtiene buen desempeño, pero es sensible a la multicolinealidad entre las variables y puede sobreajustar si hay correlaciones fuertes.
+- **Ridge**: Introdujo regularización que redujo la varianza del modelo. Observamos que los coeficientes se encogieron de manera más uniforme, logrando un mejor equilibrio entre sesgo y varianza.
+- **Lasso**: Mantuvo un α muy pequeño (≈0.001), lo que indica que apenas aplicó penalización. Esto se debe a que ninguna variable fue claramente redundante o innecesaria, por lo que el modelo se comportó casi igual a OLS.
 
-   * Use `LinearRegression` and confirm the coefficients match your OLS implementation.
-   * Compute $R^2$ and mean squared error on the test set.
-
----
-
-## Part C. Regularization and Hyperparameter Choice
-
-5. **Ridge and Lasso**
-
-   * Fit `Ridge` and `Lasso` regressions for $\lambda$ values logarithmically spaced between $10^{-3}$ and $10^{2}$.
-   * Plot coefficient magnitude vs. $\lambda$ (regularization paths).
-   * Comment on which features shrink to (or toward) zero and why.
-
-6. **k-Fold Cross-Validation**
-
-   * Use `KFold` with 5 folds and `cross_val_score` to select the best $\alpha$ for both Ridge and Lasso.
-   * Alternatively, demonstrate the convenience of `RidgeCV` and `LassoCV`.
-   * Compare cross-validated test errors.
-
-7. **Feature Engineering & Multicollinearity**
-
-  * Add polynomial features (degree 2) using `PolynomialFeatures`.
-  * Re-run Ridge/Lasso and discuss how regularization copes with the enlarged feature space.
+### Bike Sharing (hour.csv)
+- **OLS**: Ajustó bien los datos, pero no manejó del todo la complejidad asociada a la estacionalidad y los patrones horarios.
+- **Ridge**: Seleccionó un α bastante alto (≈49.4), lo que muestra que una regularización fuerte ayudó a controlar la alta correlación entre variables temporales (hora, día, estación). Obtuvo un MSE ≈19380.
+- **Lasso**: Escogió un α muy bajo (≈0.13), mostrando que prefirió no eliminar variables. Su MSE fue prácticamente igual al de Ridge (≈19379), lo que indica que ambos modelos se comportaron de forma muy similar, aunque con distinta fuerza de regularización.
 
 ---
 
-## Part D. Bike Rentals
+## 📌 Efecto de la tasa de aprendizaje en Gradient Descent
 
-8. **Alternative Dataset**
+### California Housing
+- Con una tasa de aprendizaje **muy pequeña**, el descenso de gradiente converge de forma estable, pero muy lentamente.  
+- Con una tasa **más alta**, el costo disminuye mucho más rápido, aunque si es demasiado grande, el algoritmo puede oscilar o divergir.  
+- En este dataset, se observó que un valor intermedio permitió alcanzar resultados comparables al OLS cerrado en menos iteraciones.
 
-  * Use the **Bike Sharing Dataset** (available in the `data` folder).
-  * Predict daily rentals (`cnt`); investigate seasonal effects.
-  * Apply all the same steps as above.
+### Bike Sharing
+- Debido a la mayor complejidad y número de observaciones, la elección del learning rate fue aún más importante.  
+- Un valor demasiado alto llevó a oscilaciones en la curva de costo, mientras que valores moderados lograron converger a un error cercano al alcanzado por los métodos cerrados y regularizados.
 
 ---
 
-### Deliverables
-You must fork the [original repository](), and turn in a link to your groups repository with:
+## 📌 Influencia de k-Fold Cross-Validation en la elección de la regularización
 
-* A Jupyter notebook (in the `src` folder) with:
+### California Housing
+- El uso de **k=5 folds** permitió estimar de manera más robusta el desempeño de Ridge y Lasso en distintos subconjuntos de datos.  
+- Ridge obtuvo un α ≈3.7, lo que indica que una regularización moderada mejoraba el ajuste.  
+- Lasso seleccionó un α ≈0.001, mostrando que no era necesario eliminar variables en este dataset.
 
-  * Your `numpy` implementations for OLS and gradient descent,
-  * Plots: cost-function convergence, coefficient paths, predicted vs. actual values.
-* A write-up in Markdown. Replace the contents of this file (`README.md`) with:
-  
-  * The names of your group's members,
-  * Differences observed between OLS, Ridge, and Lasso,
-  * Effect of learning rate on gradient descent,
-  * How k-fold cross-validation influenced the choice of regularization strength.
+### Bike Sharing
+- En este caso, la validación cruzada encontró un **α mucho más alto para Ridge (≈49.4)**, evidenciando la necesidad de un control fuerte frente a la multicolinealidad y los patrones estacionales.  
+- Lasso, en contraste, mantuvo un α bajo (≈0.13), indicando que ninguna variable fue eliminada, aunque la penalización mínima fue suficiente para estabilizar el modelo.  
+- En ambos casos, la validación cruzada fue clave para ajustar la fuerza de regularización según la complejidad y redundancia de las características.
 
+---
+
+## 📌 Conclusión General
+- En **California Housing**, la regularización apenas mejoró el desempeño respecto a OLS, porque el dataset no requería una fuerte penalización.  
+- En **Bike Sharing**, Ridge necesitó un α grande para estabilizar el modelo frente a la alta correlación de variables temporales, mientras que Lasso casi no eliminó predictores, pero alcanzó un error similar.  
+- La validación cruzada fue esencial para adaptar la regularización a cada dataset, mostrando cómo un mismo método puede comportarse distinto según la estructura de los datos.  
+- El gradiente descendente confirmó la importancia de elegir adecuadamente la tasa de aprendizaje para garantizar convergencia sin inestabilidad.
