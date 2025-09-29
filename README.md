@@ -1,8 +1,8 @@
 # Proyecto Final – Regresión Lineal y Regularización
 
 ## Integrantes
-- JOEL MATEO MANRIQUE VELASQUEZ
-- LUIS ENRRIQUE PEREZ RAMOS
+-- JOEL MATEO MANRIQUE VELASQUEZ
+-- LUIS ENRRIQUE PEREZ RAMOS
 
 ---
 
