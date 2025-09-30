@@ -23,8 +23,8 @@
 ## 📌 Efecto de la tasa de aprendizaje en Gradient Descent
 
 ### California Housing
-- Con una tasa de aprendizaje **muy pequeña**, el descenso de gradiente converge de forma estable, pero muy lentamente.  
-- Con una tasa **más alta**, el costo disminuye mucho más rápido, aunque si es demasiado grande, el algoritmo puede oscilar o divergir.  
+- Con una tasa de aprendizaje muy pequeña, el descenso de gradiente converge de forma estable, pero muy lentamente.  
+- Con una tasa más alta, el costo disminuye mucho más rápido, aunque si es demasiado grande, el algoritmo puede oscilar o divergir.  
 - En este dataset, se observó que un valor intermedio permitió alcanzar resultados comparables al OLS cerrado en menos iteraciones.
 
 ### Bike Sharing
@@ -36,19 +36,19 @@
 ## 📌 Influencia de k-Fold Cross-Validation en la elección de la regularización
 
 ### California Housing
-- El uso de **k=5 folds** permitió estimar de manera más robusta el desempeño de Ridge y Lasso en distintos subconjuntos de datos.  
+- El uso de k=5 folds permitió estimar de manera más robusta el desempeño de Ridge y Lasso en distintos subconjuntos de datos.  
 - Ridge obtuvo un α ≈3.7, lo que indica que una regularización moderada mejoraba el ajuste.  
 - Lasso seleccionó un α ≈0.001, mostrando que no era necesario eliminar variables en este dataset.
 
 ### Bike Sharing
-- En este caso, la validación cruzada encontró un **α mucho más alto para Ridge (≈49.4)**, evidenciando la necesidad de un control fuerte frente a la multicolinealidad y los patrones estacionales.  
+- En este caso, la validación cruzada encontró un α mucho más alto para Ridge (≈49.4), evidenciando la necesidad de un control fuerte frente a la multicolinealidad y los patrones estacionales.  
 - Lasso, en contraste, mantuvo un α bajo (≈0.13), indicando que ninguna variable fue eliminada, aunque la penalización mínima fue suficiente para estabilizar el modelo.  
 - En ambos casos, la validación cruzada fue clave para ajustar la fuerza de regularización según la complejidad y redundancia de las características.
 
 ---
 
 ## 📌 Conclusión General
-- En **California Housing**, la regularización apenas mejoró el desempeño respecto a OLS, porque el dataset no requería una fuerte penalización.  
-- En **Bike Sharing**, Ridge necesitó un α grande para estabilizar el modelo frente a la alta correlación de variables temporales, mientras que Lasso casi no eliminó predictores, pero alcanzó un error similar.  
+- En California Housing, la regularización apenas mejoró el desempeño respecto a OLS, porque el dataset no requería una fuerte penalización.  
+- En Bike Sharing, Ridge necesitó un α grande para estabilizar el modelo frente a la alta correlación de variables temporales, mientras que Lasso casi no eliminó predictores, pero alcanzó un error similar.  
 - La validación cruzada fue esencial para adaptar la regularización a cada dataset, mostrando cómo un mismo método puede comportarse distinto según la estructura de los datos.  
 - El gradiente descendente confirmó la importancia de elegir adecuadamente la tasa de aprendizaje para garantizar convergencia sin inestabilidad.
